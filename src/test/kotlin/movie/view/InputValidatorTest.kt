@@ -1,4 +1,4 @@
-package movie.domain.view
+package movie.view
 
 import movie.view.InputValidator
 import org.junit.jupiter.api.Test

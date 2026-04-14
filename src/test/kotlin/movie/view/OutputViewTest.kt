@@ -1,4 +1,4 @@
-package movie.domain.view
+package movie.view
 
 import movie.view.OutputView
 import org.assertj.core.api.Assertions.assertThat
