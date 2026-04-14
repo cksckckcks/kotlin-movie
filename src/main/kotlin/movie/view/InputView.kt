@@ -1,5 +1,7 @@
 package movie.view
 
+import movie.domain.payment.Card
+import movie.domain.payment.Cash
 import movie.domain.payment.PaymentMethod
 
 object InputView {
@@ -41,8 +43,15 @@ object InputView {
     fun readPaymentType(paymentMethods: List<PaymentMethod>): String {
         println("결제 수단을 선택하세요:")
         paymentMethods.forEachIndexed { index, method ->
+            val name =
+                when (method) {
+                    is Card -> "신용카드"
+                    is Cash -> "현금"
+                    is PaymentMethod -> "없음"
+                }
+
             val discountPercent = (method.discountRate * 100).toInt()
-            println("${index + 1}) ${method.name}($discountPercent% 할인)")
+            println("${index + 1}) $name($discountPercent% 할인)")
         }
         return readln()
     }
