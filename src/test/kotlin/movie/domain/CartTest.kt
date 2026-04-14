@@ -45,6 +45,18 @@ class CartTest {
         assertThat(cart.isDuplicateTime(schedule2)).isFalse
     }
 
+    @Test
+    fun `모든 예약을 반환한다`() {
+        val cart = Cart()
+
+        cart.addReservation(schedule, emptyList())
+        cart.addReservation(schedule2, emptyList())
+
+        val reservations = cart.getReservations()
+
+        assertThat(reservations.size).isEqualTo(2)
+    }
+
     companion object {
         val movie = Movie(MovieTitle("아이언맨"), 200)
         val schedule =
