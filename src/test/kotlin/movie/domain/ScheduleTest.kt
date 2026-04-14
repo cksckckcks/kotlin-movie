@@ -1,6 +1,5 @@
 package movie.domain
 
-import movie.domain.MovieTitle
 import movie.domain.seat.SeatNumber
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -97,5 +96,45 @@ class ScheduleTest {
         assertThrows<IllegalArgumentException> {
             schedule.addSeats(seatNumbers)
         }
+    }
+
+    @Test
+    fun `좌석이 예약되지 않은 상태라면 false를 반환한다`() {
+        val schedule =
+            Schedule(
+                movie =
+                    Movie(
+                        title = MovieTitle("시동"),
+                        runningTime = 120,
+                    ),
+                startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
+                endTime = LocalDateTime.of(2026, 4, 10, 12, 0),
+            )
+
+        val seatNumber = SeatNumber(row = 'A', col = 1)
+
+        assertThat(schedule.isReservationSeats(listOf(seatNumber))).isFalse
+        assertThat(schedule.isReservationSeat(seatNumber)).isFalse
+    }
+
+    @Test
+    fun `좌석이 예약된 상태라면 true를 반환한다`() {
+        val schedule =
+            Schedule(
+                movie =
+                    Movie(
+                        title = MovieTitle("시동"),
+                        runningTime = 120,
+                    ),
+                startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
+                endTime = LocalDateTime.of(2026, 4, 10, 12, 0),
+            )
+
+        val seatNumber = SeatNumber(row = 'A', col = 1)
+
+        schedule.addSeats(listOf(seatNumber))
+
+        assertThat(schedule.isReservationSeats(listOf(seatNumber))).isTrue
+        assertThat(schedule.isReservationSeat(seatNumber)).isTrue
     }
 }
