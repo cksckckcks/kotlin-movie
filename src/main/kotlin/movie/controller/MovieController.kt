@@ -38,6 +38,35 @@ class MovieController(
         moviePricePayment()
     }
 
+    private fun getReservationStart(): Boolean =
+        whileGetInput {
+            val input = InputView.readReservationStart()
+            InputValidator.validateYesNo(input)
+
+            InputParser.parseYesNo(input)
+        }
+
+    private fun movieReservationStart() {
+        val title = getTitle()
+        val movieTimes = getMovieTimes(title)
+
+        val schedule = getSchedule(title = title, movieTimes = movieTimes)
+        val seats = getSeats(schedule)
+
+        schedule.addSeats(seats)
+        cart.addReservation(schedule = schedule, seats = seats)
+
+        OutputView.printReservationAddMessage(schedule, seats)
+    }
+
+    private fun getContinueReservation(): Boolean =
+        whileGetInput {
+            val input = InputView.readContinueReservation()
+            InputValidator.validateYesNo(input)
+
+            InputParser.parseYesNo(input)
+        }
+
     private fun moviePricePayment() {
         OutputView.printCart(cart)
 
@@ -59,28 +88,14 @@ class MovieController(
         }
     }
 
-    private fun movieReservationStart() {
-        val title = getTitle()
-        val movieTimes = getMovieTimes(title)
-
-        val schedule = getSchedule(title = title, movieTimes = movieTimes)
-        val seats = getSeats(schedule)
-
-        schedule.addSeats(seats)
-        cart.addReservation(schedule = schedule, seats = seats)
-
-        OutputView.printReservationAddMessage(schedule, seats)
-    }
-
-    private fun getSeats(schedule: Schedule): List<SeatNumber> =
+    private fun getTitle(): MovieTitle =
         whileGetInput {
-            val input = InputView.readReservationSeat()
-            InputValidator.validateSeatNumbers(input)
+            val input = InputView.readMovieTitle()
+            val title = InputParser.parseMovieTitle(input)
 
-            val seats = InputParser.parseSeatNumbers(input)
-            require(!schedule.isReservationSeats(seats)) { "이미 예약된 좌석입니다." }
+            require(movieManager.hasMovieTitle(title)) { "상영 중인 영화가 없습니다." }
 
-            seats
+            title
         }
 
     private fun getMovieTimes(title: MovieTitle): List<LocalDateTime> =
@@ -114,39 +129,15 @@ class MovieController(
         }
     }
 
-    private fun getDate(): LocalDate =
+    private fun getSeats(schedule: Schedule): List<SeatNumber> =
         whileGetInput {
-            val date = InputView.readMovieDate()
+            val input = InputView.readReservationSeat()
+            InputValidator.validateSeatNumbers(input)
 
-            InputValidator.validateDate(date)
+            val seats = InputParser.parseSeatNumbers(input)
+            require(!schedule.isReservationSeats(seats)) { "이미 예약된 좌석입니다." }
 
-            InputParser.parseDate(date)
-        }
-
-    private fun getTitle(): MovieTitle =
-        whileGetInput {
-            val input = InputView.readMovieTitle()
-            val title = InputParser.parseMovieTitle(input)
-
-            require(movieManager.hasMovieTitle(title)) { "상영 중인 영화가 없습니다." }
-
-            title
-        }
-
-    private fun getReservationStart(): Boolean =
-        whileGetInput {
-            val input = InputView.readReservationStart()
-            InputValidator.validateYesNo(input)
-
-            InputParser.parseYesNo(input)
-        }
-
-    private fun getContinueReservation(): Boolean =
-        whileGetInput {
-            val input = InputView.readContinueReservation()
-            InputValidator.validateYesNo(input)
-
-            InputParser.parseYesNo(input)
+            seats
         }
 
     private fun getUsePoint(): Point =
@@ -174,6 +165,15 @@ class MovieController(
             InputValidator.validateYesNo(input)
 
             InputParser.parseYesNo(input)
+        }
+
+    private fun getDate(): LocalDate =
+        whileGetInput {
+            val date = InputView.readMovieDate()
+
+            InputValidator.validateDate(date)
+
+            InputParser.parseDate(date)
         }
 
     private fun <T> whileGetInput(action: () -> T): T {
