@@ -4,11 +4,16 @@ import movie.domain.Price
 import movie.fixture.ScheduleFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 class DiscountTest {
     @Test
     fun `무비데이 할인이 적용된 가격을 반환한다`() {
-        val schedule = ScheduleFixture.createSchedule()
+        val schedule =
+            ScheduleFixture.createSchedule(
+                startTime = LocalDateTime.of(2026, 4, 10, 12, 0),
+                endTime = LocalDateTime.of(2026, 4, 10, 13, 0),
+            )
         val price = Price(30_000)
         val discount = Discount()
         val discountPrice = discount.getTotalDiscountPrice(price, schedule)
@@ -18,7 +23,10 @@ class DiscountTest {
 
     @Test
     fun `타임 할인이 적용된 가격을 반환한다`() {
-        val schedule = ScheduleFixture.createSchedule()
+        val schedule =
+            ScheduleFixture.createSchedule(
+                startTime = LocalDateTime.of(2026, 4, 9, 7, 0),
+            )
         val price = Price(30_000)
         val discount = Discount()
         val discountPrice = discount.getTotalDiscountPrice(price, schedule)
