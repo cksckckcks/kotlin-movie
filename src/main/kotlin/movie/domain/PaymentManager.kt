@@ -1,7 +1,6 @@
 package movie.domain
 
 import movie.domain.discount.Discount
-import movie.domain.payment.Payment
 import movie.domain.payment.PaymentMethod
 import movie.domain.point.Point
 import movie.domain.point.PointPolicy
@@ -9,7 +8,6 @@ import movie.domain.point.PointPolicy
 class PaymentManager(
     private val discount: Discount = Discount(),
     private val pointPolicy: PointPolicy = PointPolicy(),
-    private val payment: Payment = Payment(),
 ) {
     fun calculateFinalPrice(
         cart: Cart,
@@ -25,6 +23,6 @@ class PaymentManager(
 
         val totalPrice = pointPolicy.usePoint(totalDiscountedPrice, usePoint)
 
-        return payment.paymentPrice(paymentMethod, totalPrice)
+        return paymentMethod.paymentPrice(totalPrice)
     }
 }
