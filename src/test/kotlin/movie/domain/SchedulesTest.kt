@@ -1,6 +1,5 @@
 package movie.domain
 
-import movie.domain.MovieTitle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -37,6 +36,19 @@ class SchedulesTest {
             )
 
         assertThat(movieSchedules).isEqualTo(scheduleList)
+    }
+
+    @Test
+    fun `특정 영화의 스케줄을 반환한다`() {
+        val scheduleList = listOf(schedule1, schedule2, schedule3)
+        val schedules = Schedules(scheduleList)
+
+        val movieSchedules = schedules.getSchedule(
+            movieTitle = schedule1.movie.title,
+            startTime = schedule1.startTime
+        )
+
+        assertThat(movieSchedules).isEqualTo(schedule1)
     }
 
     companion object {
