@@ -1,18 +1,26 @@
 package movie.domain
 
 import movie.domain.seat.SeatNumber
+import kotlin.collections.toMutableList
 
 class Cart(
-    private val reservations: Reservations = Reservations(),
+    reservations: List<Reservation> = emptyList(),
 ) {
+    private val _reservations = reservations.toMutableList()
+
+    fun getReservations(): List<Reservation> = _reservations.toList()
+
     fun addReservation(
         schedule: Schedule,
         seats: List<SeatNumber>,
     ) {
-        reservations.addReservation(schedule = schedule, seats = seats)
+        require(!isDuplicateTime(schedule = schedule)) { "상영시간은 중복될 수 없습니다." }
+
+        _reservations.add(Reservation(schedule, seats))
     }
 
-    fun getReservations(): List<Reservation> = reservations.getReservations()
-
-    fun isDuplicateTime(schedule: Schedule): Boolean = reservations.isDuplicateTime(schedule)
+    fun isDuplicateTime(schedule: Schedule): Boolean =
+        _reservations.any {
+            it.isDuplicateTime(schedule)
+        }
 }
