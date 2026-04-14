@@ -1,5 +1,6 @@
 package movie.domain
 
+import movie.fixture.ScheduleFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -59,24 +60,18 @@ class CartTest {
 
     companion object {
         val movie = Movie(MovieTitle("아이언맨"), 200)
-        val schedule =
-            Schedule(
-                movie = movie,
-                startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
-                endTime = LocalDateTime.of(2026, 4, 10, 12, 40),
-            )
+        val schedule = ScheduleFixture.createSchedule(
+            startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
+            endTime = LocalDateTime.of(2026, 4, 10, 12, 40),
+        )
 
-        val dupSchedule =
-            Schedule(
-                movie = movie,
-                startTime = LocalDateTime.of(2026, 4, 10, 12, 0),
-                endTime = LocalDateTime.of(2026, 4, 10, 14, 40),
-            )
-        val schedule2 =
-            Schedule(
-                movie = movie,
-                startTime = LocalDateTime.of(2026, 4, 10, 12, 50),
-                endTime = LocalDateTime.of(2026, 4, 10, 14, 50),
-            )
+        val dupSchedule = ScheduleFixture.createSchedule(
+            startTime = LocalDateTime.of(2026, 4, 10, 12, 0),
+            endTime = LocalDateTime.of(2026, 4, 10, 14, 40),
+        )
+        val schedule2 = ScheduleFixture.createSchedule(
+            startTime = LocalDateTime.of(2026, 4, 10, 12, 50),
+            endTime = LocalDateTime.of(2026, 4, 10, 14, 50),
+        )
     }
 }
