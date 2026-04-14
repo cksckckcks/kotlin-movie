@@ -10,8 +10,6 @@ import movie.domain.payment.Cash
 import movie.domain.payment.PaymentMethod
 import movie.domain.point.Point
 import movie.domain.seat.SeatNumber
-import movie.view.InputParser
-import movie.view.InputValidator
 import movie.view.InputView
 import movie.view.OutputView
 import java.time.LocalDate
@@ -40,10 +38,7 @@ class MovieController(
 
     private fun getReservationStart(): Boolean =
         whileGetInput {
-            val input = InputView.readReservationStart()
-            InputValidator.validateYesNo(input)
-
-            InputParser.parseYesNo(input)
+            InputView.readReservationStart()
         }
 
     private fun movieReservationStart() {
@@ -61,10 +56,7 @@ class MovieController(
 
     private fun getContinueReservation(): Boolean =
         whileGetInput {
-            val input = InputView.readContinueReservation()
-            InputValidator.validateYesNo(input)
-
-            InputParser.parseYesNo(input)
+            InputView.readContinueReservation()
         }
 
     private fun moviePricePayment() {
@@ -113,9 +105,11 @@ class MovieController(
         OutputView.printMovieStartTimes(movieTimes)
 
         return whileGetInput {
-            val input = InputView.readSelectedMovieTimeNumber()
-            InputValidator.validateNumber(input)
-            val index = InputParser.parseIndex(input = input, size = movieTimes.size)
+            val index = InputView.readSelectedMovieTimeNumber()
+
+            require(index < movieTimes.size) {
+                "시간 인덱스가 유효하지 않습니다."
+            }
 
             val schedule = movieManager.getSchedule(title = title, startTime = movieTimes[index])
 
@@ -132,11 +126,8 @@ class MovieController(
     private fun getSeats(schedule: Schedule): List<SeatNumber> =
         whileGetInput {
             val input = InputView.readReservationSeat()
-            InputValidator.validateSeatNumbers(input)
 
-            val splitInput = InputParser.parseSeatNumbers(input)
-
-            val seats = splitInput.map { SeatNumber(it) }
+            val seats = input.map { SeatNumber(it) }
 
             require(!schedule.isReservationSeats(seats)) { "이미 예약된 좌석입니다." }
 
@@ -153,29 +144,21 @@ class MovieController(
     private fun getPaymentMethod(): PaymentMethod =
         whileGetInput {
             val paymentMethods = listOf(Cash(), Card())
-            val input = InputView.readPaymentType(paymentMethods)
-            InputValidator.validateNumber(input)
-
-            val index = InputParser.parseIndex(input = input, size = paymentMethods.size)
+            val index = InputView.readPaymentType(paymentMethods)
 
             paymentMethods[index]
         }
 
     private fun getUserPayment(): Boolean =
         whileGetInput {
-            val input = InputView.readUserPayment()
-            InputValidator.validateYesNo(input)
-
-            InputParser.parseYesNo(input)
+            InputView.readUserPayment()
         }
 
     private fun getDate(): LocalDate =
         whileGetInput {
             val date = InputView.readMovieDate()
 
-            InputValidator.validateDate(date)
-
-            InputParser.parseDate(date)
+            LocalDate.parse(date)
         }
 
     private fun <T> whileGetInput(action: () -> T): T {
