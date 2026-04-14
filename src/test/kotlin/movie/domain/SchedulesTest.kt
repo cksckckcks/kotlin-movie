@@ -42,10 +42,11 @@ class SchedulesTest {
     fun `특정 영화의 스케줄을 반환한다`() {
         val schedule = ScheduleFixture.createSchedule()
         val schedules = Schedules(listOf(schedule))
-        val movieSchedules = schedules.getSchedule(
-            movieTitle = schedule.movie.title,
-            startTime = schedule.startTime
-        )
+        val movieSchedules =
+            schedules.getSchedule(
+                movieTitle = schedule.movie.title,
+                startTime = schedule.startTime,
+            )
 
         assertThat(movieSchedules).isEqualTo(schedule)
     }

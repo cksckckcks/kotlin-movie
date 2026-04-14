@@ -1,13 +1,9 @@
 package movie.domain.discount
 
-import movie.domain.Movie
-import movie.domain.MovieTitle
 import movie.domain.Price
-import movie.domain.Schedule
 import movie.fixture.ScheduleFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 class DiscountTest {
     @Test

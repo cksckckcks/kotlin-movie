@@ -34,7 +34,7 @@ class InputParserTest {
         val seatNumbers =
             listOf(
                 "A1",
-                "B1"
+                "B1",
             )
 
         assertThat(result).isEqualTo(seatNumbers)

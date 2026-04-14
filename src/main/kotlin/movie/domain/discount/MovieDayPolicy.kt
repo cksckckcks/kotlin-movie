@@ -15,8 +15,7 @@ class MovieDayPolicy : DateDiscountPolicy {
         return price
     }
 
-    private fun isMovieDay(schedule: Schedule): Boolean =
-        schedule.startTime.dayOfMonth in MOVIE_DAY_LIST
+    private fun isMovieDay(schedule: Schedule): Boolean = schedule.startTime.dayOfMonth in MOVIE_DAY_LIST
 
     companion object {
         private val MOVIE_DAY_LIST = listOf(10, 20, 30)
