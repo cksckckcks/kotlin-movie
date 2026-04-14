@@ -91,7 +91,7 @@ class MovieController(
     private fun getTitle(): MovieTitle =
         whileGetInput {
             val input = InputView.readMovieTitle()
-            val title = InputParser.parseMovieTitle(input)
+            val title = MovieTitle(input)
 
             require(movieManager.hasMovieTitle(title)) { "상영 중인 영화가 없습니다." }
 
@@ -134,7 +134,10 @@ class MovieController(
             val input = InputView.readReservationSeat()
             InputValidator.validateSeatNumbers(input)
 
-            val seats = InputParser.parseSeatNumbers(input)
+            val splitInput = InputParser.parseSeatNumbers(input)
+
+            val seats = splitInput.map { SeatNumber(it) }
+
             require(!schedule.isReservationSeats(seats)) { "이미 예약된 좌석입니다." }
 
             seats
@@ -143,9 +146,8 @@ class MovieController(
     private fun getUsePoint(): Point =
         whileGetInput {
             val input = InputView.readUsePoint()
-            InputValidator.validateNumber(input)
 
-            InputParser.parsePoint(input)
+            Point(input)
         }
 
     private fun getPaymentMethod(): PaymentMethod =

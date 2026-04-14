@@ -1,8 +1,5 @@
 package movie.view
 
-import movie.domain.MovieTitle
-import movie.domain.point.Point
-import movie.domain.seat.SeatNumber
 import java.time.LocalDate
 
 object InputParser {
@@ -10,21 +7,10 @@ object InputParser {
 
     fun parseDate(input: String): LocalDate = LocalDate.parse(input)
 
-    fun parsePoint(input: String): Point = Point(input.toInt())
-
-    fun parseSeatNumbers(input: String): List<SeatNumber> =
+    fun parseSeatNumbers(input: String): List<String> =
         input
             .split(",")
             .map { it.trim() }
-            .map { seat ->
-                val row = seat.first()
-                val col = seat.substring(1).toInt()
-
-                SeatNumber(
-                    row = row,
-                    col = col,
-                )
-            }
 
     fun parseIndex(
         input: String,
@@ -35,6 +21,4 @@ object InputParser {
 
         return index - 1
     }
-
-    fun parseMovieTitle(input: String): MovieTitle = MovieTitle(input)
 }
