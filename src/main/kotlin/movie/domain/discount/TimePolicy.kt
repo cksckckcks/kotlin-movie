@@ -15,5 +15,10 @@ class TimePolicy : DateDiscountPolicy {
         return price
     }
 
-    private fun isTimeDiscount(schedule: Schedule): Boolean = schedule.startTime.hour !in 11..19
+    private fun isTimeDiscount(schedule: Schedule): Boolean =
+        schedule.startTime.hour !in DISCOUNT_TIME
+
+    companion object {
+        private val DISCOUNT_TIME = 11..19
+    }
 }
