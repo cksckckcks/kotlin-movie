@@ -15,6 +15,4 @@ data class SeatNumber(
             input.substring(1).toIntOrNull()
                 ?: throw IllegalArgumentException("좌석 열 번호는 정수여야 합니다."),
     )
-
-    override fun toString(): String = "$row$col"
 }
