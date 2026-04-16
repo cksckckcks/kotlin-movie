@@ -97,3 +97,29 @@
 
 ### MovieController
 - [x] 영화 예매를 진행할 수 있다.
+
+## 3단계 구현 기능
+
+## Database
+### movie
+- [ ] 영화 정보를 저장한다.
+- [ ] title, running_time을 가진다.
+- [ ] 여러 상영 정보를 가진다.
+
+### schedule
+- [ ] 상영 정보를 저장한다.
+- [ ] movie_id, start_time, end_time을 가진다.
+- [ ] 하나의 영화에 속한다.
+- [ ] 여러 예약 정보를 가진다.
+
+### reservation
+- [ ] 예약 정보를 저장한다.
+- [ ] schedule_id, total_price, reserved_at을 가진다.
+- [ ] 하나의 상영에 속한다.
+- [ ] 여러 좌석 정보를 가진다.
+
+### reserved_seat
+- [ ] 예약된 좌석 정보를 저장한다.
+- [ ] reservation_id, schedule_id, seat_number를 가진다.
+- [ ] 하나의 예약에 속한다.
+- [ ] 동일한 상영에서 동일 좌석은 한 번만 예약되도록 UNIQUE 제약 조건을 가진다.
