@@ -10,15 +10,17 @@ import movie.domain.payment.Cash
 import movie.domain.payment.PaymentMethod
 import movie.domain.point.Point
 import movie.domain.seat.SeatNumber
+import movie.service.ScheduleService
 import movie.view.InputView
 import movie.view.OutputView
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class MovieController(
-    private val movieManager: MovieManager,
+    private val scheduleService: ScheduleService,
     private val paymentManager: PaymentManager = PaymentManager(),
     private val cart: Cart = Cart(),
+    private val movieManager: MovieManager = MovieManager(scheduleService.getSchedules()),
 ) {
     fun run() {
         if (!getReservationStart()) {
