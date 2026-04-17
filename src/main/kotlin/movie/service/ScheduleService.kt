@@ -23,6 +23,7 @@ class ScheduleService(
             val selectedSeats = SelectedSeats(seatNumbers)
 
             Schedule(
+                id = dto.scheduleId,
                 movie = Movie(MovieTitle(dto.title), dto.runningTime),
                 startTime = dto.startTime,
                 endTime = dto.endTime,

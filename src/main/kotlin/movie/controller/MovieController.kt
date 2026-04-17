@@ -10,6 +10,9 @@ import movie.domain.payment.Cash
 import movie.domain.payment.PaymentMethod
 import movie.domain.point.Point
 import movie.domain.seat.SeatNumber
+import movie.repository.ReservationRepository
+import movie.repository.ScheduleRepository
+import movie.service.ReservationService
 import movie.service.ScheduleService
 import movie.view.InputView
 import movie.view.OutputView
@@ -17,7 +20,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class MovieController(
-    private val scheduleService: ScheduleService,
+    private val scheduleService: ScheduleService = ScheduleService(ScheduleRepository()),
+    private val reservationService: ReservationService = ReservationService(ReservationRepository()),
     private val paymentManager: PaymentManager = PaymentManager(),
     private val cart: Cart = Cart(),
     private val movieManager: MovieManager = MovieManager(scheduleService.getSchedules()),
@@ -77,6 +81,7 @@ class MovieController(
         OutputView.printTotalPrice(paymentPrice)
 
         if (getUserPayment()) {
+            cart.getReservations().forEach { reservationService.saveReservation(it) }
             OutputView.printReceipt(cart = cart, paymentPrice = paymentPrice, usePoint = usePoint)
             OutputView.printThankYou()
         }

@@ -5,6 +5,7 @@ import movie.domain.seat.SelectedSeats
 import java.time.LocalDateTime
 
 class Schedule(
+    val id: Long,
     val movie: Movie,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
