@@ -129,6 +129,6 @@
 - [x] 예약을 저장할 수 있다.
 
 ## 4단계 구현 기능
-- [ ] API를 구현한다.
-  - [ ] 영화를 조회하는 API를 구현한다. (GET /api/movies)
-  - [ ] 영화를 예매하는 API를 구현한다. (POST /api/reservations)
+- [x] API를 구현한다.
+  - [x] 영화를 조회하는 API를 구현한다. (GET /api/movies)
+  - [x] 영화를 예매하는 API를 구현한다. (POST /api/reservations)
