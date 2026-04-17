@@ -18,7 +18,7 @@ class ScheduleRepository(private val connection: Connection) {
 
     private fun fetchMovieSchedules(): List<MovieScheduleDto> {
         val query = """
-            SELECT s.id as schedule_id, m.title, m.running_time, s.start_time, s.end_time 
+            SELECT m.id as movie_id, s.id as schedule_id, m.title, m.running_time, s.start_time, s.end_time 
             FROM movie m 
             JOIN schedule s ON m.id = s.movie_id
         """.trimIndent()
@@ -30,6 +30,7 @@ class ScheduleRepository(private val connection: Connection) {
             while (rs.next()) {
                 movieSchedules.add(
                     MovieScheduleDto(
+                        movieId = rs.getLong("movie_id"),
                         scheduleId = rs.getLong("schedule_id"),
                         title = rs.getString("title"),
                         runningTime = rs.getInt("running_time"),

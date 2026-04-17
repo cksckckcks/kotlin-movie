@@ -3,6 +3,7 @@ package movie.dto
 import java.time.LocalDateTime
 
 data class MovieScheduleDto(
+    val movieId: Long,
     val scheduleId: Long,
     val title: String,
     val runningTime: Int,

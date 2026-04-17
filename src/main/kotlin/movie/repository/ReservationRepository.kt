@@ -5,7 +5,7 @@ import java.sql.Connection
 import java.sql.Statement
 
 class ReservationRepository(private val connection: Connection) {
-    fun save(reservation: Reservation) {
+    fun save(reservation: Reservation): Long {
         val reservationQuery = """
             INSERT INTO reservation (schedule_id, total_price)
             VALUES (?, ?)
@@ -43,6 +43,7 @@ class ReservationRepository(private val connection: Connection) {
             }
 
             connection.commit()
+            return reservationId
         } catch (e: Exception) {
             connection.rollback()
             throw e

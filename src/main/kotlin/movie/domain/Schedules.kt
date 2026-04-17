@@ -38,4 +38,8 @@ class Schedules(
         schedules.firstOrNull {
             it.movie.title == movieTitle && it.startTime == startTime
         } ?: throw IllegalArgumentException("영화 제목 또는 시작 시간이 올바르지 않습니다.")
+
+    fun getScheduleById(id: Long): Schedule =
+        schedules.firstOrNull { it.id == id }
+            ?: throw IllegalArgumentException("존재하지 않는 상영 정보입니다.")
 }
