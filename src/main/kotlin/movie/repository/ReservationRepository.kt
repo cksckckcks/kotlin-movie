@@ -1,5 +1,6 @@
 package movie.repository
 
+import movie.error.SystemErrorMessage
 import movie.domain.Reservation
 import java.sql.Connection
 import java.sql.Statement
@@ -28,7 +29,7 @@ class ReservationRepository(private val connection: Connection) {
                 if (rs.next()) {
                     rs.getLong(1)
                 } else {
-                    throw IllegalStateException("예약 생성에 실패했습니다.")
+                    throw IllegalStateException(SystemErrorMessage.RESERVATION_FAILED)
                 }
             }
 

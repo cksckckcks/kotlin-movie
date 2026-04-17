@@ -1,5 +1,7 @@
 package movie.api
 
+import movie.error.PaymentErrorMessage
+import movie.error.SeatErrorMessage
 import movie.domain.*
 import movie.domain.payment.Card
 import movie.domain.payment.Cash
@@ -53,7 +55,7 @@ class MovieApiController(
                 val schedule = allSchedules.getScheduleById(item.screeningId)
                 val seats = item.seats.map { SeatNumber(it) }
 
-                require(!schedule.isReservationSeats(seats)) { "이미 예약된 좌석입니다." }
+                require(!schedule.isReservationSeats(seats)) { SeatErrorMessage.ALREADY_RESERVED }
 
                 schedule.addSeats(seats)
                 cart.addReservation(schedule, seats)
@@ -62,7 +64,7 @@ class MovieApiController(
             val paymentMethod = when (request.paymentMethod) {
                 "CREDIT_CARD" -> Card()
                 "CASH" -> Cash()
-                else -> throw IllegalArgumentException("올바르지 않은 결제 수단입니다.")
+                else -> throw IllegalArgumentException(PaymentErrorMessage.INVALID_METHOD)
             }
 
             val finalPrice = paymentManager.calculateFinalPrice(

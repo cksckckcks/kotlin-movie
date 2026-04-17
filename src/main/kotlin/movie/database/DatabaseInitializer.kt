@@ -1,5 +1,7 @@
 package movie.database
 
+import movie.error.SystemErrorMessage
+
 object DatabaseInitializer {
     fun initSchema() {
         val connection = DatabaseFactory.getConnection()
@@ -10,11 +12,11 @@ object DatabaseInitializer {
 
         if (isFirstRun) {
             val schemaSql = this::class.java.classLoader.getResource("movie.sql")?.readText()
-                ?: throw IllegalStateException("movie.sql 파일을 찾을 수 없습니다.")
+                ?: throw IllegalStateException("movie.sql" + SystemErrorMessage.SQL_FILE_NOT_FOUND)
             statement.execute(schemaSql)
 
             val dataSql = this::class.java.classLoader.getResource("movie_data.sql")?.readText()
-                ?: throw IllegalStateException("movie_data.sql 파일을 찾을 수 없습니다.")
+                ?: throw IllegalStateException("movie_data.sql" + SystemErrorMessage.SQL_FILE_NOT_FOUND)
             statement.execute(dataSql)
         }
 
