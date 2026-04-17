@@ -1,10 +1,10 @@
 package movie.repository
 
-import movie.database.DatabaseFactory
 import movie.dto.MovieScheduleDto
 import movie.dto.ReservedSeatDto
+import java.sql.Connection
 
-class ScheduleRepository {
+class ScheduleRepository(private val connection: Connection) {
     fun findAllSchedule(): List<MovieScheduleDto> {
         val schedules = fetchMovieSchedules()
         val allReservedSeats = fetchAllReservedSeats()
@@ -24,21 +24,19 @@ class ScheduleRepository {
         """.trimIndent()
 
         val movieSchedules = mutableListOf<MovieScheduleDto>()
-        DatabaseFactory.getConnection().use { connection ->
-            connection.prepareStatement(query).use { pstmt ->
-                val rs = pstmt.executeQuery()
+        connection.prepareStatement(query).use { pstmt ->
+            val rs = pstmt.executeQuery()
 
-                while (rs.next()) {
-                    movieSchedules.add(
-                        MovieScheduleDto(
-                            scheduleId = rs.getLong("schedule_id"),
-                            title = rs.getString("title"),
-                            runningTime = rs.getInt("running_time"),
-                            startTime = rs.getTimestamp("start_time").toLocalDateTime(),
-                            endTime = rs.getTimestamp("end_time").toLocalDateTime()
-                        )
+            while (rs.next()) {
+                movieSchedules.add(
+                    MovieScheduleDto(
+                        scheduleId = rs.getLong("schedule_id"),
+                        title = rs.getString("title"),
+                        runningTime = rs.getInt("running_time"),
+                        startTime = rs.getTimestamp("start_time").toLocalDateTime(),
+                        endTime = rs.getTimestamp("end_time").toLocalDateTime()
                     )
-                }
+                )
             }
         }
         return movieSchedules
@@ -51,15 +49,13 @@ class ScheduleRepository {
         """.trimIndent()
         val seatMap = mutableMapOf<Long, MutableList<ReservedSeatDto>>()
 
-        DatabaseFactory.getConnection().use { connection ->
-            connection.prepareStatement(query).use { pstmt ->
-                val rs = pstmt.executeQuery()
+        connection.prepareStatement(query).use { pstmt ->
+            val rs = pstmt.executeQuery()
 
-                while (rs.next()) {
-                    val id = rs.getLong("schedule_id")
-                    val seat = ReservedSeatDto(rs.getString("seat_number"))
-                    seatMap.getOrPut(id) { mutableListOf() }.add(seat)
-                }
+            while (rs.next()) {
+                val id = rs.getLong("schedule_id")
+                val seat = ReservedSeatDto(rs.getString("seat_number"))
+                seatMap.getOrPut(id) { mutableListOf() }.add(seat)
             }
         }
         return seatMap
